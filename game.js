@@ -11,7 +11,7 @@ const CHARS = {
   inma: { idle:'00', run:['03','04','05','06','07','08','09','10'], jumpUp:'20', jumpDown:'20', duck:'22', label:'INMA' },
 };
 const ENEMIES = {
-  javi: { dir:'javi', idle:'00', run:['13','14','15','16','17','18','19','20'] },
+  javi: { dir:'javi', idle:'00', run:['15','16','17','18','19','20'] },
 };
 const ITEMS = [
   { key:'it_phone', file:'10', score:20,  type:'score', tint:0x6cf0c0 },
@@ -98,10 +98,12 @@ class Menu extends Phaser.Scene {
 
     this.add.text(W/2, 64, 'EU & INMA', {fontFamily:'monospace',fontSize:'52px',color:'#ffffff',
       stroke:'#1b2440',strokeThickness:8}).setOrigin(0.5);
-    this.add.text(W/2, 112, 'Misión cerveza y cigarro', {fontFamily:'monospace',fontSize:'22px',color:'#6cf0c0'}).setOrigin(0.5);
+    this.add.text(W/2, 110, 'Misión cerveza y cigarro', {fontFamily:'monospace',fontSize:'22px',color:'#6cf0c0'}).setOrigin(0.5);
+    this.add.text(W/2, 138, 'Con la aparición estelar de el pelopolla',
+      {fontFamily:'monospace',fontSize:'14px',color:'#ff9ed8',fontStyle:'italic'}).setOrigin(0.5);
 
     const hs = +(localStorage.getItem(HS_KEY)||0);
-    this.add.text(W/2, 150, `RÉCORD: ${hs}`, {fontFamily:'monospace',fontSize:'16px',color:'#ffe27a'}).setOrigin(0.5);
+    this.add.text(W/2, 164, `RÉCORD: ${hs}`, {fontFamily:'monospace',fontSize:'16px',color:'#ffe27a'}).setOrigin(0.5);
 
     this.add.text(W/2, 200, 'Elige tu personaje', {fontFamily:'monospace',fontSize:'22px',color:'#cfe8ff'}).setOrigin(0.5);
 
@@ -278,7 +280,8 @@ class Play extends Phaser.Scene {
     o.setData('fly', kind==='fly');
     o.setData('extra', extra);
     if (anim) o.play(`${ename}_run`);
-    o.setFlipX(false); // javi (idle y run) ya mira a la izquierda
+    // corriendo (anim): mira a la izquierda (frames 13-20). Parado/flotante: idle espejado mirando a la derecha.
+    o.setFlipX(!anim);
 
     // siguiente spawn con separación que escala con la velocidad
     this.obTimer.delay = Phaser.Math.Between(700, 1300) * (340/this.speed) + 350;
