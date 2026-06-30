@@ -217,16 +217,42 @@ class Play extends Phaser.Scene {
     this.input.keyboard.on('keydown-DOWN', ()=>this.setDuck(true));
     this.input.keyboard.on('keyup-DOWN', ()=>this.setDuck(false));
 
+    this.addTouchButtons();
+
     this.input.on('pointerdown', (p)=>{
       if (this.gameOver) return;
-      if (this.muteBtn && this.muteBtn.getBounds().contains(p.x, p.y)) return; // no saltar al pulsar mute
-      // mitad inferior = agacharse, resto = saltar
-      if (p.y > this.scale.height*0.62) { this._duckPtr = p.id; this.setDuck(true); }
-      else this.jump();
+      if (this._overBtn(p)) return;        // los botones se gestionan solos
+      this.jump();                         // tocar en cualquier otro sitio = saltar
     });
-    this.input.on('pointerup', (p)=>{
-      if (p.id === this._duckPtr){ this._duckPtr = null; this.setDuck(false); }
-    });
+  }
+
+  // botones en pantalla para móvil: izq agacharse (mantener), der saltar
+  addTouchButtons(){
+    const r = 52, y = H - 70;
+    const make = (x, label, col)=>{
+      const c = this.add.circle(x, y, r, col, 0.28).setStrokeStyle(3, col, 0.9)
+        .setScrollFactor(0).setDepth(70).setInteractive({useHandCursor:true});
+      const t = this.add.text(x, y, label, {fontFamily:'monospace',fontSize:'40px',color:'#ffffff'})
+        .setOrigin(0.5).setScrollFactor(0).setDepth(71);
+      return c;
+    };
+    this.jumpBtn = make(W - 80, '▲', 0x6cf0c0);
+    this.duckBtn = make(80, '▼', 0xffb347);
+
+    this.jumpBtn.on('pointerdown', (p,x,y,e)=>{ e&&e.stopPropagation(); this.jump(); });
+
+    const duckOn  = (p,x,y,e)=>{ e&&e.stopPropagation(); this._duckPtr = p.id; this.setDuck(true); };
+    const duckOff = (p)=>{ if (!p || p.id === this._duckPtr){ this._duckPtr = null; this.setDuck(false); } };
+    this.duckBtn.on('pointerdown', duckOn);
+    this.duckBtn.on('pointerup', duckOff);
+    this.duckBtn.on('pointerout', duckOff);
+  }
+
+  _overBtn(p){
+    for (const b of [this.jumpBtn, this.duckBtn, this.muteBtn]){
+      if (b && b.getBounds().contains(p.x, p.y)) return true;
+    }
+    return false;
   }
 
   jump(){
