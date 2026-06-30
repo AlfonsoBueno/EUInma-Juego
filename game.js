@@ -228,16 +228,16 @@ class Play extends Phaser.Scene {
 
   // botones en pantalla para móvil: izq agacharse (mantener), der saltar
   addTouchButtons(){
-    const r = 52, y = H - 70;
+    const bw = 150, bh = 76, y = H - 56;
     const make = (x, label, col)=>{
-      const c = this.add.circle(x, y, r, col, 0.28).setStrokeStyle(3, col, 0.9)
+      const c = this.add.rectangle(x, y, bw, bh, col, 0.30).setStrokeStyle(3, col, 0.95)
         .setScrollFactor(0).setDepth(70).setInteractive({useHandCursor:true});
-      const t = this.add.text(x, y, label, {fontFamily:'monospace',fontSize:'40px',color:'#ffffff'})
-        .setOrigin(0.5).setScrollFactor(0).setDepth(71);
+      this.add.text(x, y, label, {fontFamily:'monospace',fontSize:'24px',color:'#ffffff',
+        stroke:'#1b2440',strokeThickness:4}).setOrigin(0.5).setScrollFactor(0).setDepth(71);
       return c;
     };
-    this.jumpBtn = make(W - 80, '▲', 0x6cf0c0);
-    this.duckBtn = make(80, '▼', 0xffb347);
+    this.jumpBtn = make(W - bw/2 - 24, '▲ SALTAR', 0x6cf0c0);
+    this.duckBtn = make(bw/2 + 24, 'AGACHAR ▼', 0xffb347);
 
     this.jumpBtn.on('pointerdown', (p,x,y,e)=>{ e&&e.stopPropagation(); this.jump(); });
 
