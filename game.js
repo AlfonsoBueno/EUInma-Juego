@@ -115,8 +115,12 @@ class Menu extends Phaser.Scene {
     this.makeChoice('inma',W/2+170, 360, 'INMA');
 
     this.add.text(W/2, H-34,
-      'Saltar: toca arriba / SPACE · Agacharse: mantén abajo / ↓',
+      'Saltar: botón / SPACE · Agacharse: botón / ↓',
       {fontFamily:'monospace',fontSize:'14px',color:'#9fb4d8'}).setOrigin(0.5);
+
+    const fs = this.add.text(W-20, 20, '⛶ Pantalla completa',
+      {fontFamily:'monospace',fontSize:'15px',color:'#cfe8ff'}).setOrigin(1,0).setInteractive({useHandCursor:true});
+    fs.on('pointerdown', (p,x,y,e)=>{ e&&e.stopPropagation(); this.scale.toggleFullscreen(); });
   }
   makeChoice(name, x, y, label){
     const tex = this.textures.get(`${name}_idle`).getSourceImage();
@@ -190,6 +194,11 @@ class Play extends Phaser.Scene {
       .setScrollFactor(0).setDepth(50).setInteractive({useHandCursor:true});
     this.muteBtn.on('pointerdown', (p,x,y,e)=>{ e&&e.stopPropagation(); Sfx.muted=!Sfx.muted; this.muteBtn.setText(Sfx.muted?'🔇':'🔊'); });
 
+    // pantalla completa
+    this.fsBtn = this.add.text(60, 48, '⛶', {fontSize:'24px'})
+      .setScrollFactor(0).setDepth(50).setInteractive({useHandCursor:true});
+    this.fsBtn.on('pointerdown', (p,x,y,e)=>{ e&&e.stopPropagation(); this.scale.toggleFullscreen(); });
+
     this.setupInput();
 
     // spawns
@@ -249,7 +258,7 @@ class Play extends Phaser.Scene {
   }
 
   _overBtn(p){
-    for (const b of [this.jumpBtn, this.duckBtn, this.muteBtn]){
+    for (const b of [this.jumpBtn, this.duckBtn, this.muteBtn, this.fsBtn]){
       if (b && b.getBounds().contains(p.x, p.y)) return true;
     }
     return false;
