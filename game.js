@@ -235,18 +235,20 @@ class Play extends Phaser.Scene {
     });
   }
 
-  // botones en pantalla para móvil: izq agacharse (mantener), der saltar
+  // botones circulares para móvil: izq SALTAR, der AGACHARSE (mantener)
   addTouchButtons(){
-    const bw = 150, bh = 76, y = H - 56;
-    const make = (x, label, col)=>{
-      const c = this.add.rectangle(x, y, bw, bh, col, 0.30).setStrokeStyle(3, col, 0.95)
+    const r = 60, y = H - 76;
+    const make = (x, icon, label, col)=>{
+      const c = this.add.circle(x, y, r, 0xffffff, 0.16).setStrokeStyle(4, col, 0.95)
         .setScrollFactor(0).setDepth(70).setInteractive({useHandCursor:true});
-      this.add.text(x, y, label, {fontFamily:'monospace',fontSize:'24px',color:'#ffffff',
+      this.add.text(x, y-16, icon, {fontFamily:'monospace',fontSize:'34px',color:'#ffffff',
+        stroke:'#1b2440',strokeThickness:4}).setOrigin(0.5).setScrollFactor(0).setDepth(71);
+      this.add.text(x, y+24, label, {fontFamily:'monospace',fontSize:'16px',color:'#ffffff',
         stroke:'#1b2440',strokeThickness:4}).setOrigin(0.5).setScrollFactor(0).setDepth(71);
       return c;
     };
-    this.jumpBtn = make(W - bw/2 - 24, '▲ SALTAR', 0x6cf0c0);
-    this.duckBtn = make(bw/2 + 24, 'AGACHAR ▼', 0xffb347);
+    this.jumpBtn = make(90,     '↑', 'SALTAR',   0x6cf0c0);
+    this.duckBtn = make(W - 90, '↓', 'AGACHARSE',0xffb347);
 
     this.jumpBtn.on('pointerdown', (p,x,y,e)=>{ e&&e.stopPropagation(); this.jump(); });
 
