@@ -1,6 +1,10 @@
 /* Eu vs Inma — endless runner estilo Dino. Phaser 3. */
 
-const W = 960, H = 540;
+// ancho del mundo dinámico = encaja el aspecto real del dispositivo (alto fijo).
+// así Scale.FIT llena la pantalla sin barras y el suelo queda siempre abajo.
+const H = 540;
+const _ar = (window.innerWidth || 960) / (window.innerHeight || 540);
+const W = Phaser.Math.Clamp(Math.round(H * _ar), 760, 1500);
 const GROUND_H = 64;
 const GROUND_Y = H - GROUND_H;        // y del suelo (pies del jugador)
 const PLAYER_X = W * 0.18;
