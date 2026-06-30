@@ -1,0 +1,5 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0}#game{width:960px;height:540px}</style></head>
+<body><div id="game"></div>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+<script src="game.js"></script>
+<script>let d=0;window.addEventListener('load',()=>{const t=setInterval(()=>{const g=window.game;if(!d&&g&&g.isBooted&&g.scene.getScene('Play')){g.registry.set('char','eu');g.scene.start('Play');d=1;clearInterval(t);setTimeout(()=>{const s=g.scene.getScene('Play');for(let i=0;i<4;i++)s.spawnObstacle();let x=300;s.obstacles.children.iterate(o=>{if(o){o.x=x;x+=180;}});},700);}},120);});</script></body></html>
